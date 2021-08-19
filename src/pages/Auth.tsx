@@ -1,7 +1,7 @@
 import { Tabs,  TabList, Tab, TabPanels, TabPanel, Box, useColorMode} from "@chakra-ui/react";
 import React from "react";
 
-import LoginForm from "../components/Auth/LoginForm";
+import LoginForm from "../components/Auth/SignInForm";
 import SignUpForm from "../components/Auth/SignupForm";
 
 const Auth = () => {
@@ -16,7 +16,7 @@ const Auth = () => {
       <Tabs variant='enclosed-colored' isFitted m={4}>
         <TabList>
           <Tab>Sign Up</Tab>
-          <Tab>Login</Tab>
+          <Tab>Sign In</Tab>
         </TabList>
         <TabPanels mt={3}>
           <TabPanel>

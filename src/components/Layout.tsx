@@ -2,7 +2,6 @@ import { Flex } from "@chakra-ui/react";
 import React from "react";
 import NavBar from "./NavBar";
 
-
 const Layout: React.FC = (props) => {
   return (
     <Flex direction='column' align='center' justify='center'>
