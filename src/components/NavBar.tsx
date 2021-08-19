@@ -209,10 +209,5 @@ const NAV_ITEMS: Array<NavItem> = [
     label: 'Bikes',
     to: '/bikes',
     roles: ['manager', 'user']
-  },
-  {
-    label: 'Users',
-    to: '/users',
-    roles: ['manager']
-  },
+  }
 ];

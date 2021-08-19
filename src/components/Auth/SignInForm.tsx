@@ -7,7 +7,7 @@ import AuthenticatedUser from "../../models/AuthUser";
 import { useContext } from "react";
 import AuthContext from "../../store/auth-context";
 
-const LoginForm = () => {
+const SignInForm = () => {
   const API_URL = process.env.REACT_APP_BIKES_API_URL || 'http://localhost:4000/api';
   const authContext = useContext(AuthContext);
   const history = useHistory();
@@ -91,4 +91,4 @@ const LoginForm = () => {
   )
 }
 
-export default LoginForm;
+export default SignInForm;
