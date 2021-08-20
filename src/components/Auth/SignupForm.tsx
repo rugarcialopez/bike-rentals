@@ -6,6 +6,7 @@ import AuthenticatedUser from "../../models/AuthUser";
 import { useHistory } from "react-router-dom";
 import { useContext } from "react";
 import AuthContext from "../../store/auth-context";
+import ApiError from "../../models/ApiError";
 
 const SignUpForm = () => {
   const API_URL = process.env.REACT_APP_BIKES_API_URL || 'http://localhost:4000/api';
@@ -18,40 +19,39 @@ const SignUpForm = () => {
   const emailRef = useRef() as React.MutableRefObject<HTMLInputElement>;
   const passwordRef = useRef() as React.MutableRefObject<HTMLInputElement>;
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    fetch(`${API_URL}/signUp`, {
-      method: 'POST',
-      body: JSON.stringify({
-        firstName: firstNameRef.current.value,
-        lastName: lastNameRef.current.value,
-        email: emailRef.current.value,
-        password: passwordRef.current.value
-      }),
-      headers: {
-        'Content-Type': 'application/json'
+    try {
+      const response = await fetch(`${API_URL}/signUp`, {
+        method: 'POST',
+        body: JSON.stringify({
+          firstName: firstNameRef.current.value,
+          lastName: lastNameRef.current.value,
+          email: emailRef.current.value,
+          password: passwordRef.current.value
+        }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      if (!response.ok) {
+        const responseData: ApiError = await response.json();
+        throw new Error(responseData.message || response.statusText)
       }
-    }).then(async (response) => {
-      const responseData = await response.json();
-      if (response.ok) {
-        return responseData;
-      } else {
-        throw Error(responseData.message || response.statusText)
-      }
-    }).then((responseData: AuthenticatedUser) => {
+      const responseData: AuthenticatedUser = await response.json();
       const expirationTime = new Date(
         new Date().getTime() + (responseData.expirationTime * 1000)
       );
       authContext.login(responseData.token, responseData.role, expirationTime.toISOString(), responseData.userId);
       history.push('/bikes');
-    }).catch(error => {
+    } catch (error) {
       toast({
         title: `${error}`,
         status: 'error',
         isClosable: true,
         duration: 3000
       });
-    })
+    }
   }
 
   return (
