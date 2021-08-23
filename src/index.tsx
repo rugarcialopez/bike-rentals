@@ -5,22 +5,26 @@ import {
 } from "@chakra-ui/react";
 import * as React from "react"
 import ReactDOM from "react-dom"
+import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import { App } from "./App"
 import reportWebVitals from "./reportWebVitals"
 import * as serviceWorker from "./serviceWorker"
 import { AuthProvider } from "./store/auth-context";
+import store from "./store/index";
 
 ReactDOM.render(
   <React.StrictMode>
-    <AuthProvider>
-      <BrowserRouter>
-        <ColorModeScript />
-        <ChakraProvider theme={theme}>
-          <App />
-        </ChakraProvider> 
-      </BrowserRouter>
-    </AuthProvider>
+    <Provider store={store}>
+      <AuthProvider>
+        <BrowserRouter>
+          <ColorModeScript />
+          <ChakraProvider theme={theme}>
+            <App />
+          </ChakraProvider> 
+        </BrowserRouter>
+      </AuthProvider>
+    </Provider>
   </React.StrictMode>,
   document.getElementById("root"),
 )

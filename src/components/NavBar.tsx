@@ -206,6 +206,11 @@ interface NavItem {
 
 const NAV_ITEMS: Array<NavItem> = [
   {
+    label: 'Users',
+    to: '/users',
+    roles: ['manager']
+  },
+  {
     label: 'Bikes',
     to: '/bikes',
     roles: ['manager', 'user']

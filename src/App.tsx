@@ -5,8 +5,10 @@ import Layout from "./components/Layout"
 import AddUserPage from "./pages/AddUserPage"
 import Auth from "./pages/Auth"
 import BikesPage from "./pages/BikesPage"
+import EditUserPage from "./pages/EditUserPage"
 import HomePage from "./pages/HomePage"
 import NotFoundPage from "./pages/NotFoundPage"
+import UsersPage from "./pages/UsersPage"
 import AuthContext from "./store/auth-context"
 
 
@@ -25,6 +27,18 @@ export const App = () => {
           !authContext.isLoggedIn &&
           <Route path="/login">
             <Auth />
+          </Route>
+        }
+        {
+          authContext.isLoggedIn && authContext.role === 'manager' &&
+          <Route path="/users/:id">
+            <EditUserPage />
+          </Route>
+        }
+        {
+          authContext.isLoggedIn && authContext.role === 'manager' &&
+          <Route path="/users">
+            <UsersPage />
           </Route>
         }
         {

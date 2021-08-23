@@ -32,7 +32,7 @@ const SignInForm = () => {
       });
       if (!response.ok) {
         const responseData: ApiError = await response.json();
-        throw new Error(responseData.message || response.statusText)
+        throw new Error(responseData.message || response.statusText);
       }
       const responseData: AuthenticatedUser = await response.json();
       const expirationTime = new Date(

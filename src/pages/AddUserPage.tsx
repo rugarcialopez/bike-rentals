@@ -14,7 +14,7 @@ const AddUserPage = () => {
       >
           Add User
       </Heading>
-      <UserForm />
+      <UserForm editMode={false}/>
     </VStack>    
   )
 }
