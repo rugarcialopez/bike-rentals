@@ -34,7 +34,7 @@ const UsersList = () => {
         alignItems='strecht'
       >
         { (users).map(user => (
-          <HStack key={user.id}>
+          <HStack key={user.id} bg='gray.200' p={4}>
             <VStack alignItems='flex-start'>
               <HStack>
                 <Text fontWeight='bold'>Name:</Text>
@@ -54,12 +54,16 @@ const UsersList = () => {
               onClick={() => history.push(`/users/${user.id}`)}
               aria-label='Edit icon'
               icon={<EditIcon/>}
-              isRound/>
+              isRound
+              bg='gray.500'
+              _hover={{ boxShadow: 'md' }}/>
             <IconButton
               onClick={removeHandle.bind(null, user.id)}
               aria-label='Delete icon'
               icon={<DeleteIcon/>}
-              isRound/>
+              isRound
+              bg='gray.500'
+              _hover={{ boxShadow: 'md' }}/>
           </HStack>
         ))}
       </VStack>
