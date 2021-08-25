@@ -136,9 +136,9 @@ describe('Users page', () => {
         </AuthContext.Provider>
       </Provider>        
     );
-    const buttonNodes = await screen.findAllByLabelText('Delete icon');
-    expect(buttonNodes.length).toEqual(2);
-    fireEvent.click(buttonNodes[0]);
+    const removeButtons = await screen.findAllByText('Remove');
+    expect(removeButtons.length).toEqual(2);
+    fireEvent.click(removeButtons[0]);
     const learnerTwo = await screen.findByText('learner02@example.com');
     expect(learnerTwo).toBeInTheDocument();
     const learnerOne = screen.queryByText('learner01@example.com');
