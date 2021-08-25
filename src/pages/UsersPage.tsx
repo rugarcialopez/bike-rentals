@@ -23,7 +23,7 @@ const UsersPage = () => {
     return <Spinner />;
   }
   return (
-      <VStack p={4} w='100vw' marginTop={8}>
+      <VStack p={4} w='100vw' marginTop={8} h='100%'>
         <Heading 
           mb='8'
           fontWeight='extrabold'

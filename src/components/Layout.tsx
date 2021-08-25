@@ -6,7 +6,7 @@ const Layout: React.FC = (props) => {
   return (
     <Flex direction='column' align='center' justify='center'>
       <NavBar />
-      <Flex justify='center' align='center' w='100%' h='100%'>
+      <Flex justify='center' align='center' w='100%' h='93vh'>
         {props.children}
       </Flex>
     </Flex>

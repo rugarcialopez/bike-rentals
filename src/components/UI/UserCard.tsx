@@ -5,8 +5,7 @@ import {
   Stack,
   Button,
   Badge,
-  VStack,
-  StackDivider,
+  Box,
 } from '@chakra-ui/react';
 import User from '../../models/User';
 import { useHistory } from 'react-router-dom';
@@ -14,14 +13,14 @@ import { useHistory } from 'react-router-dom';
 const UserCard: React.FC<{user: User, onRemove: (id: string) => void}>= (props) => {
   const history = useHistory();
   return (
-    <VStack
-        divider={<StackDivider/>}
-        borderColor='gray.100'
-        borderWidth='2px'
-        p='4'
-        borderRadius='lg'
+    <Box
         width='100%'
-        maxW={{base: '90vw', sm: '80vw' , lg: '50vw', xl: '40vw'}}>
+        borderWidth='2px'
+        boxShadow={'1xl'}
+        rounded={'lg'}
+        p={6}
+        maxW={{base: '90vw', sm: '80vw' , lg: '50vw', xl: '30vw'}}
+        textAlign={'center'}>
         <Heading fontSize={'2xl'} fontFamily={'body'}>
           {props.user.firstName} {props.user.lastName} 
         </Heading>
@@ -68,7 +67,7 @@ const UserCard: React.FC<{user: User, onRemove: (id: string) => void}>= (props) 
             Remove
           </Button>
         </Stack>
-      </VStack>      
+      </Box>      
   );
 }
 
