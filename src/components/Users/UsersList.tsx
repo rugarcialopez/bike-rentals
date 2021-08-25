@@ -8,6 +8,7 @@ import { RootState } from "../../store";
 import AuthContext from "../../store/auth-context";
 import { deleteUser } from "../../store/users-slice";
 import ErrorMessage from "../UI/ErrorMessage";
+import InfoMessage from "../UI/InfoMessage";
 
 const UsersList = () => {
   const history = useHistory();
@@ -23,7 +24,8 @@ const UsersList = () => {
   return (
     <Fragment>
       { error !== '' &&  <ErrorMessage message={error} />}
-      <VStack
+      { error === '' && users.length === 0 && <InfoMessage message='There are no users' />}
+      { users.length > 0 && <VStack
         divider={<StackDivider/>}
         borderColor='gray.100'
         borderWidth='2px'
@@ -58,6 +60,7 @@ const UsersList = () => {
               bg='gray.500'
               _hover={{ boxShadow: 'md' }}/>
             <IconButton
+
               onClick={removeHandle.bind(null, user.id)}
               aria-label='Delete icon'
               icon={<DeleteIcon/>}
@@ -66,7 +69,7 @@ const UsersList = () => {
               _hover={{ boxShadow: 'md' }}/>
           </HStack>
         ))}
-      </VStack>
+      </VStack> }
     </Fragment>
   )
 }

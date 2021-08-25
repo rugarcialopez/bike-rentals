@@ -15,16 +15,16 @@ import store from "./store/index";
 
 ReactDOM.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <AuthProvider>
+    <AuthProvider>
+      <Provider store={store}>
         <BrowserRouter>
           <ColorModeScript />
           <ChakraProvider theme={theme}>
             <App />
           </ChakraProvider> 
         </BrowserRouter>
-      </AuthProvider>
-    </Provider>
+        </Provider>
+    </AuthProvider>
   </React.StrictMode>,
   document.getElementById("root"),
 )

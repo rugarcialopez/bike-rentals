@@ -13,6 +13,7 @@ const UsersPage = () => {
   const dispatch = useDispatch();
   const authContext = useContext(AuthContext);
   const status = useSelector((state: RootState) => state.users.status);
+  const error = useSelector((state: RootState) => state.users.error);
 
   useEffect(() => {
     dispatch(fetchUsers(authContext.token));
@@ -33,7 +34,7 @@ const UsersPage = () => {
           Users
         </Heading>
         <UsersList />
-        <AddUser />
+        { error === '' && <AddUser /> }
     </VStack>
   )
 }

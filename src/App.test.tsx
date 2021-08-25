@@ -1,13 +1,14 @@
-import React from "react"
-import { screen } from "@testing-library/react"
-import { render } from "./test-utils"
-import { App } from "./App"
-import { AuthProvider } from "./store/auth-context";
+import React from "react";
+import { screen, render} from "@testing-library/react";
+import { App } from "./App";
+import AuthContext, { AuthProvider } from "./store/auth-context";
 import { BrowserRouter, MemoryRouter } from "react-router-dom";
 import {
   ChakraProvider,
   theme
 } from "@chakra-ui/react";
+import { Provider } from "react-redux";
+import store from "./store/index";
 
 describe('App', () => {
 
@@ -36,6 +37,18 @@ describe('App', () => {
   });
 
   describe('Routes', () => {
+
+    let fakeFetch: jest.Mock;
+
+    beforeEach(() => {
+      fakeFetch = jest.fn();
+      window.fetch = fakeFetch;
+    });
+
+    afterEach(() => {
+      fakeFetch.mockClear();
+    })
+
     test('renders <AuthPage /> for "/login" route', () => {
       render(
         <AuthProvider>
@@ -64,7 +77,80 @@ describe('App', () => {
       const pageNotFound = screen.getByText(/Page not found!/i);
       expect(pageNotFound).toBeInTheDocument();
     });
-  });
 
+    test('renders <UsersPage /> for "/users" route when user is logged in and role is manager', async () => {
+      const authContextObj = {
+        token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9',
+        role: 'manager',
+        userId: '1',
+        isLoggedIn: true,
+        login: (token: string, role: string, expirationTime: string, userId: string) => {},
+        logout: () => {},
+      }
+      const users = [
+        {
+          id: '2',
+          firstName: 'Learner',
+          lastName: 'One',
+          email: 'learner01@example.com',
+          role: 'user'
+        },
+        {
+          id: '3',
+          firstName: 'Learner',
+          lastName: 'Two',
+          email: 'learner02@example.com',
+          role: 'user'
+          }
+      ];
+   
+      fakeFetch
+      .mockResolvedValueOnce({
+        json: async () => ({ users }),
+        ok: true
+      })
+      render(
+        <AuthContext.Provider value={authContextObj}>
+          <Provider store={store}>
+            <MemoryRouter initialEntries={["/users"]}>
+              <ChakraProvider theme={theme}>
+                <App />
+              </ChakraProvider>
+            </MemoryRouter> 
+          </Provider>
+        </AuthContext.Provider>       
+      );
+      const learnerOne = await screen.findByText(/Learner One/i);
+      expect(learnerOne).toBeInTheDocument();
+      const learnerTwo = await screen.findByText(/Learner Two/i);
+      expect(learnerTwo).toBeInTheDocument();
+    });
+
+    test('does not render <UsersPage /> for "/users" route when user is logged in and role is user', async () => {
+      const authContextObj = {
+        token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9',
+        role: 'user',
+        userId: '1',
+        isLoggedIn: true,
+        login: (token: string, role: string, expirationTime: string, userId: string) => {},
+        logout: () => {},
+      }
+      
+      render(
+        <Provider store={store}>
+            <AuthContext.Provider value={authContextObj}>
+            <MemoryRouter initialEntries={["/users"]}>
+              <ChakraProvider theme={theme}>
+                <App />
+              </ChakraProvider>
+            </MemoryRouter> 
+          </AuthContext.Provider>
+        </Provider>        
+      );
+      const pageNotFound = screen.getByText(/Page not found!/i);
+      expect(pageNotFound).toBeInTheDocument();
+    });
+
+  });
 
 });

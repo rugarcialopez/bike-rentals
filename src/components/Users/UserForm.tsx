@@ -7,7 +7,8 @@ import {
   Stack,
   FormControl,
   Box,
-  Select } from "@chakra-ui/react";
+  Select, 
+  useToast} from "@chakra-ui/react";
 import { InfoIcon, EmailIcon, LockIcon } from "@chakra-ui/icons";
 import { useRef } from "react";
 import { useHistory, useParams } from "react-router-dom";
@@ -30,11 +31,12 @@ type UserFormHandle = {
 const UserForm = React.forwardRef((props: UserFormProps, ref: React.Ref<UserFormHandle>) => {
   const dispatch = useDispatch();
   const { id } = useParams<{ id: string }>();
+  const history = useHistory();
+  const toast = useToast();
   const authContext = useContext(AuthContext);
   const status = useSelector((state: RootState) => state.users.status);
   const error = useSelector((state: RootState) => state.users.error);
   const name = useSelector((state: RootState) => state.users.name);
-  const history = useHistory();
   const firstNameRef = useRef() as React.MutableRefObject<HTMLInputElement>;
   const lastNameRef = useRef() as React.MutableRefObject<HTMLInputElement>;
   const emailRef = useRef() as React.MutableRefObject<HTMLInputElement>;
@@ -57,9 +59,15 @@ const UserForm = React.forwardRef((props: UserFormProps, ref: React.Ref<UserForm
 
   useEffect(() => {
     if (['ADD', 'UPDATE'].includes(name) && status === 'completed' && error === '') {
+      // toast({
+      //   title: name === 'ADD' ? 'User created' : 'User updated',
+      //   status: 'success',
+      //   isClosable: true,
+      //   duration: 3000
+      // });
       history.push('/users');
     }
-  }, [ history, status, error, name ]);
+  }, [ history, toast, status, error, name ]);
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -140,7 +148,7 @@ const UserForm = React.forwardRef((props: UserFormProps, ref: React.Ref<UserForm
             </InputGroup>
           </FormControl> }
           <FormControl isRequired>
-            <Select placeholder="Select option" ref={roleRef} bg='white'>
+            <Select placeholder="Select option" ref={roleRef} bg='white' data-testid="select-user-role">
               <option value="manager">Manager</option>
               <option value="user">User</option>
             </Select>
