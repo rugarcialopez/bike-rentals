@@ -7,8 +7,7 @@ import {
   Stack,
   FormControl,
   Box,
-  Select, 
-  useToast} from "@chakra-ui/react";
+  Select} from "@chakra-ui/react";
 import { InfoIcon, EmailIcon, LockIcon } from "@chakra-ui/icons";
 import { useRef } from "react";
 import { useHistory, useParams } from "react-router-dom";
@@ -32,7 +31,6 @@ const UserForm = React.forwardRef((props: UserFormProps, ref: React.Ref<UserForm
   const dispatch = useDispatch();
   const { id } = useParams<{ id: string }>();
   const history = useHistory();
-  const toast = useToast();
   const authContext = useContext(AuthContext);
   const status = useSelector((state: RootState) => state.users.status);
   const error = useSelector((state: RootState) => state.users.error);
@@ -59,15 +57,9 @@ const UserForm = React.forwardRef((props: UserFormProps, ref: React.Ref<UserForm
 
   useEffect(() => {
     if (['ADD', 'UPDATE'].includes(name) && status === 'completed' && error === '') {
-      // toast({
-      //   title: name === 'ADD' ? 'User created' : 'User updated',
-      //   status: 'success',
-      //   isClosable: true,
-      //   duration: 3000
-      // });
       history.push('/users');
     }
-  }, [ history, toast, status, error, name ]);
+  }, [ history, status, error, name ]);
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();

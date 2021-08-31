@@ -2,9 +2,11 @@ import * as React from "react"
 import { useContext } from "react"
 import { Route, Switch } from "react-router-dom"
 import Layout from "./components/Layout"
+import AddBikePage from "./pages/AddBikePage"
 import AddUserPage from "./pages/AddUserPage"
 import Auth from "./pages/Auth"
 import BikesPage from "./pages/BikesPage"
+import EditBikePage from "./pages/EditBikesPage"
 import EditUserPage from "./pages/EditUserPage"
 import HomePage from "./pages/HomePage"
 import NotFoundPage from "./pages/NotFoundPage"
@@ -19,9 +21,6 @@ export const App = () => {
       <Switch>
         <Route path="/" exact>
           <HomePage/>
-        </Route>
-        <Route path="/add-user" exact>
-          <AddUserPage />
         </Route>
         {
           !authContext.isLoggedIn &&
@@ -42,9 +41,27 @@ export const App = () => {
           </Route>
         }
         {
+          authContext.isLoggedIn && authContext.role === 'manager' &&
+          <Route path="/add-user">
+            <AddUserPage />
+          </Route>
+        }
+        {
+          authContext.isLoggedIn && authContext.role === 'manager' &&
+          <Route path="/bikes/:id">
+            <EditBikePage />
+          </Route>
+        }
+        {
           authContext.isLoggedIn &&
           <Route path="/bikes">
             <BikesPage />
+          </Route>
+        }
+        {
+          authContext.isLoggedIn && authContext.role === 'manager' &&
+          <Route path="/add-bike">
+            <AddBikePage />
           </Route>
         }
         <Route path='*'>

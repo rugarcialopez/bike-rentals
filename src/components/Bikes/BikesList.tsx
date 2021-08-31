@@ -1,47 +1,31 @@
-import { DeleteIcon } from '@chakra-ui/icons';
-import { HStack, IconButton, Spacer, StackDivider, Text, VStack } from '@chakra-ui/react';
-import React from 'react';
+import React, { Fragment } from 'react';
+import { useContext } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../store';
+import AuthContext from '../../store/auth-context';
+import { deleteBike } from '../../store/bikes-slice';
+import BikeCard from '../UI/BikeCard';
+import ErrorMessage from '../UI/ErrorMessage';
+import InfoMessage from '../UI/InfoMessage';
 
 const BikesList = () => {
-  const bikes = [
-    {
-      id: 1,
-      model: 'MMR',
-      color: 'green',
-      weight: '12kg'
-    },
-    {
-      id: 2,
-      model: 'Specialized',
-      color: 'yellow',
-      weight: '10kg'
-    },
-    {
-      id: 3,
-      model: 'Cannondale',
-      color: 'black',
-      weight: '15kg'
-    }
-  ]
+  const authContext = useContext(AuthContext);
+  const bikes = useSelector((state: RootState) => state.bikes.list);
+  const error = useSelector((state: RootState) => state.bikes.error);
+  const dispatch = useDispatch();
+
+  const removeHandler = (id: string) => {
+    dispatch(deleteBike(authContext.token, id));
+  }
+
   return (
-    <VStack
-      divider={<StackDivider/>}
-      borderColor='gray.100'
-      borderWidth='2px'
-      p='4'
-      borderRadius='lg'
-      width='100%'
-      maxW={{base: '90vw', sm: '80vw' , lg: '50vw', xl: '40vw'}}
-      alignItems='strecht'
-    >
-      { bikes.map(bike => (
-        <HStack key={bike.id}>
-          <Text>{bike.model}</Text>
-          <Spacer />
-          <IconButton aria-label='Delete icon' icon={<DeleteIcon/>} isRound/>
-        </HStack>
-      ))}
-    </VStack>
+    <Fragment>
+      { error !== '' &&  <ErrorMessage message={error} />}
+      { error === '' && bikes.length === 0 && <InfoMessage message='There are no bikes' />}
+      { bikes.length > 0 &&
+        (bikes).map(bike => <BikeCard key={bike.id} bike={bike} onRemove={removeHandler}/> )
+      }
+    </Fragment>
   )
 }
 
