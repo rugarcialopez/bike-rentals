@@ -4,8 +4,8 @@ type Bike = {
   colors: string[],
   weight: number,
   location: {
-    longitude: number,
-    latitude: number
+    longitude: string
+    latitude: string
   }
   photo: string,
   availableForRenting: boolean

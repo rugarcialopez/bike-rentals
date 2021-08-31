@@ -7,12 +7,21 @@ import {
   Badge,
   Box,
   Avatar,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure
 } from '@chakra-ui/react';
 import { useHistory } from 'react-router-dom';
 import Bike from '../../models/Bike';
+import GoogleMaps from './Map';
 
 const BikeCard: React.FC<{bike: Bike, onRemove: (id: string) => void}>= (props) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const history = useHistory();
+
   return (
     <Box
         width='100%'
@@ -53,15 +62,24 @@ const BikeCard: React.FC<{bike: Bike, onRemove: (id: string) => void}>= (props) 
 
         <Stack mt={8} direction={'row'} spacing={4}>
         <Button
-            onClick={() => history.push(`/bikes/${props.bike.id}`)}
+            onClick={onOpen}
             flex={1}
             fontSize={'sm'}
             rounded={'full'}
             _focus={{
               bg: 'gray.200',
             }}>
-            View in a map
+            View map
           </Button>
+          <Modal isOpen={isOpen} onClose={onClose} size={'full'}>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalCloseButton />
+              <ModalBody>
+                <GoogleMaps longitude={props.bike.location.longitude} latitude={props.bike.location.latitude}/>
+              </ModalBody>
+            </ModalContent>
+           </Modal>
           <Button
             onClick={() => history.push(`/bikes/${props.bike.id}`)}
             flex={1}
