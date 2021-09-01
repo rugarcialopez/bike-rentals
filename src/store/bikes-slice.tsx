@@ -112,15 +112,25 @@ export const addBike = (token:  string, formData: FormData) => {
   }
 }
 
-export const updateBike =(token:  string, id: string, formData: FormData) => {
+export const updateBike =(token:  string, id: string, brand: string, colors: string[], weight: string, latitude: string, longitude: string, availableForRenting: boolean) => {
   return async (dispatch: Dispatch) => {
     dispatch(bikesActions.bikesRequest({ name: 'UPDATE' }));
     try {
+      const body = {
+        brand,
+        color: colors.join(','),
+        weight: parseInt(weight),
+        latitude,
+        longitude,
+        availableForRenting
+      };
+      
       const response = await fetch(`${API_URL}/update-bike/${id}`, {
         method: 'PUT',
-        body: formData,
+        body: JSON.stringify(body),
         headers: {
-          'token': token
+          'token': token,
+          'Content-Type': 'application/json'
         }
       });
       const responseData: {

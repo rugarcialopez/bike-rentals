@@ -18,7 +18,7 @@ const EditBikePage = () => {
     if (id && bikes.length > 0) {
       const  bike = bikes.find((bike: Bike) => bike.id === id);
       if (bike) {
-        const location = `${bike.location.longitude.toString()}, ${bike.location.latitude.toString()}`
+        const location = `${bike.location.latitude.toString()},${bike.location.longitude.toString()}`
         bikeFormRef.current.setValues(bike.brand, bike.colors, bike.weight.toString(), location, bike.availableForRenting);
       }
     }

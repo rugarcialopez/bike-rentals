@@ -70,19 +70,19 @@ const BikeForm = React.forwardRef((props: BikeFormProps, ref: React.Ref<BikeForm
 
   const onSubmit = handleSubmit(async (data) =>  {
     const coordinates = data.location.split(',');
-    const longitude = coordinates[1];
-    const latitude = coordinates[0];
-    const formData = new FormData();
-    formData.append('brand', data.brand);
-    formData.append('color', data.colors.join());
-    formData.append('weight', data.weight);
-    formData.append('longitude', longitude);
-    formData.append('latitude', latitude);
-    formData.append('availableForRenting', data.availableForRenting.toString());
-    formData.append('file', data.file[0]);
+    const latitude = coordinates[0].trim();
+    const longitude = coordinates[1].trim();
     if (props.editMode) {
-      dispatch(updateBike(authContext.token, id, formData));
+      dispatch(updateBike(authContext.token, id, data.brand, data.colors, data.weight, latitude, longitude, data.availableForRenting));
     } else {
+      const formData = new FormData();
+      formData.append('brand', data.brand);
+      formData.append('color', data.colors.join());
+      formData.append('weight', data.weight);
+      formData.append('longitude', longitude);
+      formData.append('latitude', latitude);
+      formData.append('availableForRenting', data.availableForRenting.toString());
+      formData.append('file', data.file[0]);
       dispatch(addBike(authContext.token, formData));
     }
   });
@@ -133,10 +133,10 @@ const BikeForm = React.forwardRef((props: BikeFormProps, ref: React.Ref<BikeForm
           <FormControl isInvalid={!!errors.brand}>
             <FormLabel>Model</FormLabel>
             <Select  {...register('brand', { required:  true })} placeholder="Please select a model" bg='white' data-testid="select-bike-model">
-              <option value="specialized">Specialized</option>
-              <option value="giant">Giant</option>
-              <option value="mmr">MMR</option>
-              <option value="cannondale">Cannondale</option>
+              <option value="Specialized">Specialized</option>
+              <option value="Giant">Giant</option>
+              <option value="MMR">MMR</option>
+              <option value="Cannondale">Cannondale</option>
             </Select>
             { errors.brand && <FormErrorMessage>Please select a model </FormErrorMessage> }    
           </FormControl>
@@ -176,7 +176,7 @@ const BikeForm = React.forwardRef((props: BikeFormProps, ref: React.Ref<BikeForm
               <FormHelperText>Format:latitude, longitude</FormHelperText>
               { errors.location && errors.location.message && <FormErrorMessage>{errors.location.message}</FormErrorMessage>}
           </FormControl>
-          <FormControl isInvalid={!!errors.file}>
+          { !props.editMode && <FormControl isInvalid={!!errors.file}>
             <FormLabel>Photo</FormLabel>
             <input
               type={'file'}
@@ -187,7 +187,7 @@ const BikeForm = React.forwardRef((props: BikeFormProps, ref: React.Ref<BikeForm
             <FormErrorMessage>
             { errors.file && errors.file.message && <FormErrorMessage>{errors.file.message}</FormErrorMessage>}
             </FormErrorMessage>
-          </FormControl>
+          </FormControl>}
           <FormControl>
             <HStack alignItems="flex-start" spacing={10} bg='white' p={2}>
               <Box><input type={'checkbox'} {...register('availableForRenting')}/> Available for renting</Box>
