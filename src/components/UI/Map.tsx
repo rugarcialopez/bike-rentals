@@ -7,8 +7,8 @@ const mapContainerStyle = {
   height: '95vh',
 }
 const center = {
-  lat: 45.4211,
-  lng: -75.6903
+  lat: 40.4378698,
+  lng: -3.8196207
 }
 
 const GoogleMaps: React.FC<{longitude: string, latitude: string}> = (props) => {
@@ -22,7 +22,7 @@ const GoogleMaps: React.FC<{longitude: string, latitude: string}> = (props) => {
   return(
       <GoogleMap 
       mapContainerStyle={mapContainerStyle} 
-      zoom={11} 
+      zoom={4} 
       center={center} 
       >
         <Marker

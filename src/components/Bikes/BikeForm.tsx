@@ -70,8 +70,8 @@ const BikeForm = React.forwardRef((props: BikeFormProps, ref: React.Ref<BikeForm
 
   const onSubmit = handleSubmit(async (data) =>  {
     const coordinates = data.location.split(',');
-    const longitude = coordinates[0];
-    const latitude = coordinates[1];
+    const longitude = coordinates[1];
+    const latitude = coordinates[0];
     const formData = new FormData();
     formData.append('brand', data.brand);
     formData.append('color', data.colors.join());
@@ -173,7 +173,7 @@ const BikeForm = React.forwardRef((props: BikeFormProps, ref: React.Ref<BikeForm
                   aria-label="Location"
                   bg='white'
                 />
-              <FormHelperText>Format:longitude,latitude</FormHelperText>
+              <FormHelperText>Format:latitude, longitude</FormHelperText>
               { errors.location && errors.location.message && <FormErrorMessage>{errors.location.message}</FormErrorMessage>}
           </FormControl>
           <FormControl isInvalid={!!errors.file}>
