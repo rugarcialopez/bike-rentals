@@ -1,6 +1,6 @@
 import * as React from "react"
 import { useContext } from "react"
-import { Route, Switch } from "react-router-dom"
+import { Route, Switch, useHistory, useLocation } from "react-router-dom"
 import Layout from "./components/Layout"
 import AddBikePage from "./pages/AddBikePage"
 import AddUserPage from "./pages/AddUserPage"
@@ -16,6 +16,13 @@ import AuthContext from "./store/auth-context"
 
 export const App = () => {
   const authContext = useContext(AuthContext);
+  const history = useHistory();
+  const location = useLocation();
+
+  if (location.pathname !== '/' && location.pathname !== '/login' && !authContext.isLoggedIn) {
+    history.push('/login');
+  }
+
   return (
     <Layout>
       <Switch>
