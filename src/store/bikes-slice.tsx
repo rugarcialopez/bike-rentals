@@ -10,6 +10,12 @@ type BikesState = {
   name: string
 }
 
+type BikeSearchParams  = {
+  brand?: string,
+  color?: string,
+  weight?: string
+}
+
 const initialState: BikesState = {
   error: '',
   list: [],
@@ -58,11 +64,12 @@ const bikesActions = bikesSlice.actions;
 
 export const { setBikes, addNewBike, updateExistingBike, deleteExistingBike } = bikesActions;
 
-export const fetchBikes = (token:  string) => {
+export const fetchBikes = (token:  string, searchParams: BikeSearchParams = {}) => {
   return async (dispatch: Dispatch) => {
     dispatch(bikesActions.bikesRequest({ name: ' LIST' }));
     try {
-      const response = await fetch(`${API_URL}/bikes`, {
+      const queryParams = Object.keys(searchParams).length > 0 ? '?' + new URLSearchParams(searchParams).toString() : '';
+      const response = await fetch(`${API_URL}/bikes${queryParams}`, {
         method: 'GET',
         headers: {
           'token': token,

@@ -29,7 +29,7 @@ const BikeCard: React.FC<{bike: Bike, onRemove: (id: string) => void}>= (props) 
         boxShadow={'1xl'}
         rounded={'lg'}
         p={6}
-        maxW={{base: '90vw', sm: '80vw' , lg: '50vw', xl: '30vw'}}
+        maxW={{base: '90vw', sm: '80vw' , lg: '50vw', xl: '40vw'}}
         textAlign={'center'}>
         <Avatar
           size={'xl'}
