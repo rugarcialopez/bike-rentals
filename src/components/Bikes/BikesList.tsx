@@ -12,6 +12,7 @@ const BikesList = () => {
   const authContext = useContext(AuthContext);
   const bikes = useSelector((state: RootState) => state.bikes.list);
   const error = useSelector((state: RootState) => state.bikes.error);
+  const reserveError = useSelector((state: RootState) => state.reserves.error);
   const dispatch = useDispatch();
 
   const removeHandler = (id: string) => {
@@ -20,7 +21,7 @@ const BikesList = () => {
 
   return (
     <Fragment>
-      { error !== '' &&  <ErrorMessage message={error} />}
+      { (error !== '' || reserveError !== '') &&  <ErrorMessage message={error || reserveError} />}
       { error === '' && bikes.length === 0 && <InfoMessage message='There are no bikes' />}
       { bikes.length > 0 &&
         (bikes).map(bike => <BikeCard key={bike.id} bike={bike} onRemove={removeHandler}/> )

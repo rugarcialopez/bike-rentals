@@ -11,16 +11,37 @@ import {
   ModalOverlay,
   ModalContent,
   ModalBody,
+  ModalHeader,
   ModalCloseButton,
-  useDisclosure
+  useDisclosure,
+  FormControl,
+  FormLabel,
+  Input,
+  ModalFooter
 } from '@chakra-ui/react';
 import { useHistory } from 'react-router-dom';
 import Bike from '../../models/Bike';
 import GoogleMaps from './Map';
+import { useRef } from 'react';
+import { useDispatch } from 'react-redux';
+import { addReserve } from '../../store/reserves-slice';
+import { useContext } from 'react';
+import AuthContext from '../../store/auth-context';
 
 const BikeCard: React.FC<{bike: Bike, onRemove: (id: string) => void}>= (props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen: isOpenReserve, onOpen:  onOpenReserve, onClose: onCloseReserve } = useDisclosure();
+   const reserveRef = useRef() as React.MutableRefObject<HTMLInputElement>;
   const history = useHistory();
+  const dispatch = useDispatch();
+  const authContext = useContext(AuthContext);
+
+  const saveReserveHandler = () => {
+    if (reserveRef.current.value) {
+      dispatch(addReserve(authContext.token, authContext.userId, props.bike.id, reserveRef.current.value));
+    }
+    onCloseReserve();
+  }
 
   return (
     <Box
@@ -71,6 +92,16 @@ const BikeCard: React.FC<{bike: Bike, onRemove: (id: string) => void}>= (props) 
             }}>
             View map
           </Button>
+          <Button
+            onClick={onOpenReserve}
+            flex={1}
+            fontSize={'sm'}
+            rounded={'full'}
+            _focus={{
+              bg: 'gray.200',
+            }}>
+            Reserve
+          </Button>
           <Modal isOpen={isOpen} onClose={onClose} size={'full'}>
             <ModalOverlay />
             <ModalContent>
@@ -78,6 +109,24 @@ const BikeCard: React.FC<{bike: Bike, onRemove: (id: string) => void}>= (props) 
               <ModalBody>
                 <GoogleMaps longitude={props.bike.location.longitude} latitude={props.bike.location.latitude}/>
               </ModalBody>
+            </ModalContent>
+           </Modal>
+           <Modal isOpen={isOpenReserve} onClose={onCloseReserve} size={'sm'}>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader textAlign='center'>Reserve a bike</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody pb={6}>
+                <FormControl>
+                  <FormLabel>Select a day</FormLabel>
+                  <Input type={'date'} ref={reserveRef}/>
+                </FormControl>
+              </ModalBody>
+              <ModalFooter justifyContent='center'>
+                <Button colorScheme="blue" mr={3} onClick={saveReserveHandler}>
+                  Save
+                </Button>
+              </ModalFooter>
             </ModalContent>
            </Modal>
           <Button
