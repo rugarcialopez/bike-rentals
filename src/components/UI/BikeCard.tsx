@@ -29,6 +29,7 @@ import { useContext } from 'react';
 import AuthContext from '../../store/auth-context';
 
 const BikeCard: React.FC<{bike: Bike, onRemove: (id: string) => void}>= (props) => {
+  console.log('BikeCard');
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isOpen: isOpenReserve, onOpen:  onOpenReserve, onClose: onCloseReserve } = useDisclosure();
    const reserveRef = useRef() as React.MutableRefObject<HTMLInputElement>;
@@ -173,4 +174,4 @@ const BikeCard: React.FC<{bike: Bike, onRemove: (id: string) => void}>= (props) 
   );
 }
 
-export default BikeCard;
+export default React.memo(BikeCard);

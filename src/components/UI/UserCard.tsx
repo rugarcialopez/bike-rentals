@@ -71,4 +71,4 @@ const UserCard: React.FC<{user: User, onRemove: (id: string) => void}>= (props) 
   );
 }
 
-export default UserCard;
+export default React.memo(UserCard);

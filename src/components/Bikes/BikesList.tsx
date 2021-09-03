@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import { useCallback } from 'react';
 import { useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
@@ -15,9 +16,9 @@ const BikesList = () => {
   const reserveError = useSelector((state: RootState) => state.reserves.error);
   const dispatch = useDispatch();
 
-  const removeHandler = (id: string) => {
+  const removeHandler = useCallback((id: string) => {
     dispatch(deleteBike(authContext.token, id));
-  }
+  }, [authContext.token, dispatch]);
 
   return (
     <Fragment>

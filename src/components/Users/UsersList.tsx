@@ -1,4 +1,5 @@
 import React, { Fragment } from "react";
+import { useCallback } from "react";
 import { useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
@@ -14,9 +15,9 @@ const UsersList = () => {
   const dispatch = useDispatch();
   const authContext = useContext(AuthContext);
 
-  const removeHandler = (id: string) => {
+  const removeHandler = useCallback((id: string) => {
     dispatch(deleteUser(authContext.token, id));
-  }
+  }, [dispatch, authContext.token])
 
   return (
     <Fragment>
