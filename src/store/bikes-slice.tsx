@@ -1,5 +1,6 @@
 import { createSlice, Dispatch, PayloadAction } from "@reduxjs/toolkit";
 import Bike from "../models/Bike";
+import Rate from "../models/Rate";
 
 const API_URL = process.env.REACT_APP_BIKES_API_URL || 'http://localhost:4000/api';
 
@@ -56,7 +57,16 @@ const bikesSlice = createSlice({
     bikesFail(state: BikesState, action: PayloadAction<string>) {
       state.error = action.payload;
       state.status = 'completed';
-    }
+    },
+    addNewRate(state: BikesState, action: PayloadAction<Rate>) {
+      const {
+        payload: { bikeId, averageRate, numberOfRates }
+      } = action;
+      state.list = state.list.map((bike: Bike) => 
+        bike.id === bikeId ? {...bike, averageRate, numberOfRates } : bike
+      );
+      state.status = 'completed';
+    },
   }
 });
 
@@ -179,6 +189,36 @@ export const deleteBike = (token:  string, id: string) => {
         bike
       } = responseData;
       dispatch(bikesActions.deleteExistingBike({ id: bike.id }));
+    } catch (error) {
+      dispatch(bikesActions.bikesFail(error.message))
+    }
+  }
+}
+
+export const addRate = (token:  string, bikeId: string, newRate: number) => {
+  return async (dispatch: Dispatch) => {
+    dispatch(bikesActions.bikesRequest({ name: 'ADD-RATE' }));
+    try {
+      const body = { rate: newRate };
+      const response = await fetch(`${API_URL}/add-rate/${bikeId}`, {
+        method: 'POST',
+        body: JSON.stringify(body),
+        headers: {
+          'token': token,
+          'Content-Type': 'application/json'
+        }
+      });
+      const responseData: {
+        rate: Rate,
+        message: string
+      } = await response.json();
+      if (!response.ok) {
+        throw new Error(responseData.message || response.statusText);
+      }
+      const { 
+        rate
+      } = responseData;
+      dispatch(bikesActions.addNewRate(rate));
     } catch (error) {
       dispatch(bikesActions.bikesFail(error.message))
     }

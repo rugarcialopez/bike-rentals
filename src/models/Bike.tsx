@@ -8,7 +8,9 @@ type Bike = {
     longitude: string
   }
   photo: string,
-  availableForRenting: boolean
+  availableForRenting: boolean,
+  averageRate: number,
+  numberOfRates: number
 }
 
 export default Bike;

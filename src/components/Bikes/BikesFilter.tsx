@@ -23,6 +23,7 @@ const BikesFilter = () => {
   let color = '';
   let model = '';
   let weight = '';
+  let rate = '';
   if (queryParams.get('color')) {
     color = queryParams.get('color') as string;
   }
@@ -32,27 +33,33 @@ const BikesFilter = () => {
   if (queryParams.get('weight')) {
     weight = queryParams.get('weight') as string;
   }
+  if (queryParams.get('rate')) {
+    rate = queryParams.get('rate') as string;
+  }
 
   useEffect(() => {
-    if (color || model || weight) {
+    if (color || model || weight || rate) {
       colorRef.current.value = color;
       modelRef.current.value = model;
       weightRef.current.value = weight;
+      rateRef.current.value = rate;
       let searchParams = {};
       searchParams = colorRef.current.value ? {...searchParams, color: colorRef.current.value } : searchParams;
       searchParams = modelRef.current.value ? {...searchParams, brand: modelRef.current.value } : searchParams;
       searchParams = weightRef.current.value ? {...searchParams, weight: weightRef.current.value } : searchParams;
+      searchParams = rateRef.current.value ? {...searchParams, rate: rateRef.current.value } : searchParams;
       dispatch(fetchBikes(authContext.token, searchParams));
     } else {
       dispatch(fetchBikes(authContext.token));
     }
-  }, [color, model, weight, dispatch, authContext.token]);
+  }, [color, model, weight, rate, dispatch, authContext.token]);
 
   const filterByHandler = () => {
     let searchParams = {};
     searchParams = colorRef.current.value ? {...searchParams, color: colorRef.current.value } : searchParams;
     searchParams = modelRef.current.value ? {...searchParams, brand: modelRef.current.value } : searchParams;
     searchParams = weightRef.current.value ? {...searchParams, weight: weightRef.current.value } : searchParams;
+    searchParams = rateRef.current.value ? {...searchParams, rate: rateRef.current.value } : searchParams;
     history.push({
       pathname: location.pathname,
       search: '?' + new URLSearchParams(searchParams).toString()
@@ -97,14 +104,17 @@ const BikesFilter = () => {
           <option value={14}>14 kg</option>
           <option value={15}>15 kg</option>
         </Select>
-        <Select placeholder="Rate" ref={rateRef}>
-          <option value="option1">Option 1</option>
-          <option value="option2">Option 2</option>
-          <option value="option3">Option 3</option>
+        <Select placeholder="Rate" ref={rateRef} onChange={filterByHandler}>
+          <option value={1} defaultChecked>1 star</option>
+          <option value={2}>2 stars</option>
+          <option value={3}>3 stars</option>
+          <option value={4}>4 stars</option>
+          <option value={5}>5 stars</option>
         </Select>
       </HStack>
     </VStack>
   )
+
 }
 
 export default BikesFilter;

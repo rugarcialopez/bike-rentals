@@ -17,7 +17,8 @@ import {
   FormControl,
   FormLabel,
   Input,
-  ModalFooter
+  ModalFooter,
+  Select
 } from '@chakra-ui/react';
 import { useHistory } from 'react-router-dom';
 import Bike from '../../models/Bike';
@@ -27,12 +28,15 @@ import { useDispatch } from 'react-redux';
 import { addReserve } from '../../store/reserves-slice';
 import { useContext } from 'react';
 import AuthContext from '../../store/auth-context';
+import { addRate } from '../../store/bikes-slice';
+import Rating from './Rating';
 
 const BikeCard: React.FC<{bike: Bike, onRemove: (id: string) => void}>= (props) => {
-  console.log('BikeCard');
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isOpen: isOpenReserve, onOpen:  onOpenReserve, onClose: onCloseReserve } = useDisclosure();
+  const { isOpen: isOpenRate, onOpen:  onOpenRate, onClose: onCloseRate } = useDisclosure();
    const reserveRef = useRef() as React.MutableRefObject<HTMLInputElement>;
+   const rateRef = useRef() as React.MutableRefObject<HTMLSelectElement>;
   const history = useHistory();
   const dispatch = useDispatch();
   const authContext = useContext(AuthContext);
@@ -40,6 +44,13 @@ const BikeCard: React.FC<{bike: Bike, onRemove: (id: string) => void}>= (props) 
   const saveReserveHandler = () => {
     if (reserveRef.current.value) {
       dispatch(addReserve(authContext.token, authContext.userId, props.bike.id, reserveRef.current.value));
+    }
+    onCloseReserve();
+  }
+
+  const rateHandler = () => {
+    if (rateRef.current.value) {
+      dispatch(addRate(authContext.token, props.bike.id, parseInt(rateRef.current.value)));
     }
     onCloseReserve();
   }
@@ -81,6 +92,9 @@ const BikeCard: React.FC<{bike: Bike, onRemove: (id: string) => void}>= (props) 
           </Badge>
           )}
         </Stack>
+        <Stack align={'center'} justify={'center'} direction={'row'} mt={6}>
+          <Rating rating={props.bike.averageRate} numReviews={props.bike.numberOfRates} />
+        </Stack>
 
         <Stack mt={8} direction={'row'} spacing={4}>
         {
@@ -107,6 +121,16 @@ const BikeCard: React.FC<{bike: Bike, onRemove: (id: string) => void}>= (props) 
               }}>
               Reserve
             </Button>
+            <Button
+              onClick={onOpenRate}
+              flex={1}
+              fontSize={'sm'}
+              rounded={'full'}
+              _focus={{
+                bg: 'gray.200',
+              }}>
+              Rate
+            </Button>
             <Modal isOpen={isOpen} onClose={onClose} size={'full'}>
               <ModalOverlay />
               <ModalContent>
@@ -129,6 +153,30 @@ const BikeCard: React.FC<{bike: Bike, onRemove: (id: string) => void}>= (props) 
                 </ModalBody>
                 <ModalFooter justifyContent='center'>
                   <Button colorScheme="blue" mr={3} onClick={saveReserveHandler}>
+                    Save
+                  </Button>
+                </ModalFooter>
+              </ModalContent>
+           </Modal>
+           <Modal isOpen={isOpenRate} onClose={onCloseRate} size={'sm'}>
+              <ModalOverlay />
+              <ModalContent>
+                <ModalHeader textAlign='center'>Rate the bike</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody pb={6}>
+                  <FormControl>
+                    <FormLabel>Select a rate</FormLabel>
+                    <Select ref={rateRef}>
+                      <option value={1} defaultChecked>1 star</option>
+                      <option value={2}>2 stars</option>
+                      <option value={3}>3 stars</option>
+                      <option value={4}>4 stars</option>
+                      <option value={5}>5 stars</option>
+                    </Select>
+                  </FormControl>
+                </ModalBody>
+                <ModalFooter justifyContent='center'>
+                  <Button colorScheme="blue" mr={3} onClick={rateHandler}>
                     Save
                   </Button>
                 </ModalFooter>

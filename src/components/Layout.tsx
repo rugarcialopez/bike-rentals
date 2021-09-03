@@ -8,7 +8,7 @@ const Layout: React.FC = (props) => {
   return (
     <Flex direction='column' align='center' justify='center'>
       <NavBar />
-      <Flex justify='center' align='center' w='100%' h={location.pathname !== '/bikes' && location.pathname !== '/users' ? '93vh' : ''}>
+      <Flex justify='center' align='center' w='100%' h={location.pathname !== '/bikes' && location.pathname !== '/users' && location.pathname !== '/reserves' ? '93vh' : ''}>
         {props.children}
       </Flex>
     </Flex>

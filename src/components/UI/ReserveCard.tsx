@@ -2,7 +2,6 @@ import React from 'react';
 import {
   Heading,
   Text,
-  Stack,
   Button,
   Box,
   Avatar,
@@ -32,35 +31,24 @@ const ReserveCard: React.FC<{reserve: Reserve, onCancelReservation: (id: string)
         <Text fontWeight={600} color={'gray.500'} mb={4}>
           Reserved date: {props.reserve.date}
         </Text>
-        <Stack mt={8} direction={'row'} spacing={4}>
-          <Button
-            flex={1}
-            fontSize={'sm'}
-            rounded={'full'}
-            _focus={{
-              bg: 'gray.200',
-            }}>
-            Rate
-          </Button>
-          <Button
-            onClick={props.onCancelReservation.bind(null, props.reserve.id)}
-            flex={1}
-            fontSize={'sm'}
-            rounded={'full'}
-            bg={'blue.400'}
-            color={'white'}
-            boxShadow={
-              '0px 1px 25px -5px rgb(66 153 225 / 48%), 0 10px 10px -5px rgb(66 153 225 / 43%)'
-            }
-            _hover={{
-              bg: 'blue.500',
-            }}
-            _focus={{
-              bg: 'blue.500',
-            }}>
-            Remove
-          </Button>
-        </Stack>
+        <Button
+          onClick={props.onCancelReservation.bind(null, props.reserve.id)}
+          flex={1}
+          fontSize={'sm'}
+          rounded={'full'}
+          bg={'blue.400'}
+          color={'white'}
+          boxShadow={
+            '0px 1px 25px -5px rgb(66 153 225 / 48%), 0 10px 10px -5px rgb(66 153 225 / 43%)'
+          }
+          _hover={{
+            bg: 'blue.500',
+          }}
+          _focus={{
+            bg: 'blue.500',
+          }}>
+          Cancel the reserve
+        </Button>
       </Box>      
   );
 }

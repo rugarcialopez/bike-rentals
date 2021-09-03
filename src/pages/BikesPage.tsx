@@ -5,8 +5,11 @@ import AddBike from "../components/Bikes/AddBike";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import BikesFilter from "../components/Bikes/BikesFilter";
+import { useContext } from "react";
+import AuthContext from "../store/auth-context";
 
 const BikesPage = () => {
+  const authContext = useContext(AuthContext);
   const error = useSelector((state: RootState) => state.bikes.error);
   const status = useSelector((state: RootState) => state.bikes.status);
 
@@ -24,7 +27,7 @@ const BikesPage = () => {
       <BikesFilter/>
       { status === 'pending' && <Spinner />}
       { status !== 'pending' && error === '' && <BikesList /> }
-      { status !== 'pending' && error === '' && <AddBike /> }
+      { authContext.role === 'manager' && status !== 'pending' && error === '' &&  <AddBike /> }
     </VStack>
   )
 }
