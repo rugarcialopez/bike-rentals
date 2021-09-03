@@ -4,7 +4,8 @@ type Reserve = {
   brand: string;
   userId: string,
   fullName: string,
-  date: string
+  date: string,
+  photo: string
 }
 
 export default Reserve;

@@ -10,6 +10,7 @@ import EditBikePage from "./pages/EditBikesPage"
 import EditUserPage from "./pages/EditUserPage"
 import HomePage from "./pages/HomePage"
 import NotFoundPage from "./pages/NotFoundPage"
+import ReservesPage from "./pages/ReservesPage"
 import UsersPage from "./pages/UsersPage"
 import AuthContext from "./store/auth-context"
 
@@ -69,6 +70,12 @@ export const App = () => {
           authContext.isLoggedIn && authContext.role === 'manager' &&
           <Route path="/add-bike">
             <AddBikePage />
+          </Route>
+        }
+        {
+          authContext.isLoggedIn &&
+          <Route path="/reserves">
+            <ReservesPage />
           </Route>
         }
         <Route path='*'>

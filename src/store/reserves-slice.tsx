@@ -34,6 +34,10 @@ const reservesSlice = createSlice({
       state.list.push(action.payload);
       state.status = 'completed';
     },
+    cancelExistingReserve(state: ReserveState, action: PayloadAction<{ id: string}>) {
+      state.list = state.list.filter((reserve: Reserve) => reserve.id !== action.payload.id);
+      state.status = 'completed';
+    },
     reservesFail(state: ReserveState, action: PayloadAction<string>) {
       state.error = action.payload;
       state.status = 'completed';
@@ -91,6 +95,34 @@ export const addReserve = (token:  string, userId: string, bikeId: string, date:
         reserve
       } = responseData;
       dispatch(reserveActions.addNewReserve(reserve));
+    } catch (error) {
+      dispatch(reserveActions.reservesFail(error.message))
+    }
+  }
+}
+
+export const cancelReserve = (token:  string, id: string) => {
+  return async (dispatch: Dispatch) => {
+    dispatch(reserveActions.reserveRequest({ name: 'CANCEL' }));
+    try {
+      const response = await fetch(`${API_URL}/cancel-reserve/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'token': token,
+          'Content-Type': 'application/json'
+        }
+      });
+      const responseData: {
+        reserve: Reserve,
+        message: string
+      } = await response.json();
+      if (!response.ok) {
+        throw new Error(responseData.message || response.statusText);
+      }
+      const { 
+        reserve
+      } = responseData;
+      dispatch(reserveActions.cancelExistingReserve({ id: reserve.id }));
     } catch (error) {
       dispatch(reserveActions.reservesFail(error.message))
     }
