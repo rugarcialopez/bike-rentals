@@ -218,6 +218,6 @@ const NAV_ITEMS: Array<NavItem> = [
   {
     label: 'My reserves',
     to: '/reserves',
-    roles: ['manager', 'user']
+    roles: ['user']
   }
 ];

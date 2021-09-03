@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import {
   Heading,
   Text,
@@ -82,54 +82,63 @@ const BikeCard: React.FC<{bike: Bike, onRemove: (id: string) => void}>= (props) 
         </Stack>
 
         <Stack mt={8} direction={'row'} spacing={4}>
-        <Button
-            onClick={onOpen}
-            flex={1}
-            fontSize={'sm'}
-            rounded={'full'}
-            _focus={{
-              bg: 'gray.200',
-            }}>
-            View map
-          </Button>
-          <Button
-            onClick={onOpenReserve}
-            flex={1}
-            fontSize={'sm'}
-            rounded={'full'}
-            _focus={{
-              bg: 'gray.200',
-            }}>
-            Reserve
-          </Button>
-          <Modal isOpen={isOpen} onClose={onClose} size={'full'}>
-            <ModalOverlay />
-            <ModalContent>
-              <ModalCloseButton />
-              <ModalBody>
-                <GoogleMaps longitude={props.bike.location.longitude} latitude={props.bike.location.latitude}/>
-              </ModalBody>
-            </ModalContent>
+        {
+          authContext.role === 'user' &&
+          <Fragment>
+            <Button
+              onClick={onOpen}
+              flex={1}
+              fontSize={'sm'}
+              rounded={'full'}
+              _focus={{
+                bg: 'gray.200',
+              }}>
+              View map
+            </Button>
+            <Button
+              disabled={!props.bike.availableForRenting}
+              onClick={onOpenReserve}
+              flex={1}
+              fontSize={'sm'}
+              rounded={'full'}
+              _focus={{
+                bg: 'gray.200',
+              }}>
+              Reserve
+            </Button>
+            <Modal isOpen={isOpen} onClose={onClose} size={'full'}>
+              <ModalOverlay />
+              <ModalContent>
+                <ModalCloseButton />
+                <ModalBody>
+                  <GoogleMaps longitude={props.bike.location.longitude} latitude={props.bike.location.latitude}/>
+                </ModalBody>
+              </ModalContent>
+            </Modal>
+            <Modal isOpen={isOpenReserve} onClose={onCloseReserve} size={'sm'}>
+              <ModalOverlay />
+              <ModalContent>
+                <ModalHeader textAlign='center'>Reserve a bike</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody pb={6}>
+                  <FormControl>
+                    <FormLabel>Select a day</FormLabel>
+                    <Input type={'date'} ref={reserveRef}/>
+                  </FormControl>
+                </ModalBody>
+                <ModalFooter justifyContent='center'>
+                  <Button colorScheme="blue" mr={3} onClick={saveReserveHandler}>
+                    Save
+                  </Button>
+                </ModalFooter>
+              </ModalContent>
            </Modal>
-           <Modal isOpen={isOpenReserve} onClose={onCloseReserve} size={'sm'}>
-            <ModalOverlay />
-            <ModalContent>
-              <ModalHeader textAlign='center'>Reserve a bike</ModalHeader>
-              <ModalCloseButton />
-              <ModalBody pb={6}>
-                <FormControl>
-                  <FormLabel>Select a day</FormLabel>
-                  <Input type={'date'} ref={reserveRef}/>
-                </FormControl>
-              </ModalBody>
-              <ModalFooter justifyContent='center'>
-                <Button colorScheme="blue" mr={3} onClick={saveReserveHandler}>
-                  Save
-                </Button>
-              </ModalFooter>
-            </ModalContent>
-           </Modal>
-          <Button
+          </Fragment>
+        }
+        {
+          authContext.role === 'manager' &&
+          <Fragment>
+            <Button
             onClick={() => history.push(`/bikes/${props.bike.id}`)}
             flex={1}
             fontSize={'sm'}
@@ -157,6 +166,8 @@ const BikeCard: React.FC<{bike: Bike, onRemove: (id: string) => void}>= (props) 
             }}>
             Remove
           </Button>
+          </Fragment>
+        }
         </Stack>
       </Box>      
   );

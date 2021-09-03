@@ -73,7 +73,7 @@ export const App = () => {
           </Route>
         }
         {
-          authContext.isLoggedIn &&
+          authContext.isLoggedIn && authContext.role === 'user' &&
           <Route path="/reserves">
             <ReservesPage />
           </Route>
