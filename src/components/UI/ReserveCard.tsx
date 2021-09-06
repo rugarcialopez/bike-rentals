@@ -47,7 +47,7 @@ const ReserveCard: React.FC<{reserve: Reserve, onCancelReservation: (id: string)
           _focus={{
             bg: 'blue.500',
           }}>
-          Cancel the reserve
+          Cancel
         </Button>
       </Box>      
   );

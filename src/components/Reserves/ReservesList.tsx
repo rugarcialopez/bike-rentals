@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import AuthContext from '../../store/auth-context';
 import { cancelReserve } from '../../store/reserves-slice';
-import ErrorMessage from '../UI/ErrorMessage';
 import InfoMessage from '../UI/InfoMessage';
 import ReserveCard from '../UI/ReserveCard';
 
@@ -48,7 +47,6 @@ const ReserveList = () => {
 
   return (
     <Fragment>
-      { error !== '' &&  <ErrorMessage message={error} />}
       { error === '' && reserves.length === 0 && <InfoMessage message='There are no reserves' />}
       { reserves.length > 0 &&
         (reserves).map(reserve => <ReserveCard key={reserve.id} reserve={reserve} onCancelReservation={cancelReservationHandler}/> )
