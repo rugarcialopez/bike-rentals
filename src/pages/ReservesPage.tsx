@@ -10,13 +10,13 @@ import AuthContext from "../store/auth-context";
 
 const ReservesPage = () => {
   const authContext = useContext(AuthContext);
-  const error = useSelector((state: RootState) => state.bikes.error);
-  const status = useSelector((state: RootState) => state.bikes.status);
+  const error = useSelector((state: RootState) => state.reserves.error);
+  const status = useSelector((state: RootState) => state.reserves.status);
   const dispatch = useDispatch();
 
   useEffect(() => {
    dispatch(fetchReserves(authContext.token)); 
-  }, [authContext.token, dispatch])
+  }, [authContext.token, dispatch]);
 
   return (
     <VStack p={4} w='100vw'>

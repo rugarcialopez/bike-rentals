@@ -66,7 +66,7 @@ const bikesSlice = createSlice({
         bike.id === bikeId ? {...bike, averageRate, numberOfRates } : bike
       );
       state.status = 'completed';
-    },
+    }
   }
 });
 
@@ -76,7 +76,7 @@ export const { setBikes, addNewBike, updateExistingBike, deleteExistingBike } = 
 
 export const fetchBikes = (token:  string, searchParams: BikeSearchParams = {}) => {
   return async (dispatch: Dispatch) => {
-    dispatch(bikesActions.bikesRequest({ name: ' LIST' }));
+    dispatch(bikesActions.bikesRequest({ name: 'LIST' }));
     try {
       const queryParams = Object.keys(searchParams).length > 0 ? '?' + new URLSearchParams(searchParams).toString() : '';
       const response = await fetch(`${API_URL}/bikes${queryParams}`, {

@@ -79,7 +79,7 @@ const BikesFilter = () => {
           fontWeight='extrabold'
           size='md'
         >
-          Filter by
+          Search by
       </Heading>
       <HStack spacing="20px">
         <Select placeholder="Color" ref={colorRef} onChange={filterByHandler}>

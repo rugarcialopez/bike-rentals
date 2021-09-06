@@ -50,13 +50,18 @@ const usersSlice = createSlice({
     usersFail(state: UsersState, action: PayloadAction<string>) {
       state.error = action.payload;
       state.status = 'completed';
+    },
+    logout: (state: UsersState) => {
+      // From here we can take action only at this "users" state
+      // But, as we have taken care of this particular "logout" action
+      // in rootReducer, we can use it to CLEAR the complete Redux Store's state
     }
   }
 });
 
 const userActions = usersSlice.actions;
 
-export const { setUsers, addNewUser, updateExistingUser, deleteExistingUser } = userActions;
+export const { setUsers, addNewUser, updateExistingUser, deleteExistingUser, logout } = userActions;
 
 export const fetchUsers = (token:  string) => {
   return async (dispatch: Dispatch) => {

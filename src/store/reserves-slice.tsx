@@ -49,7 +49,7 @@ const reserveActions = reservesSlice.actions;
 
 export const fetchReserves = (token:  string) => {
   return async (dispatch: Dispatch) => {
-    dispatch(reserveActions.reserveRequest({ name: ' LIST' }));
+    dispatch(reserveActions.reserveRequest({ name: 'LIST' }));
     try {
       const response = await fetch(`${API_URL}/reserves`, {
         method: 'GET',

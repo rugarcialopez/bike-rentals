@@ -23,17 +23,21 @@ import logo from "../logo.svg";
 import { useHistory, Link as ReactLink } from 'react-router-dom';
 import { useContext } from 'react';
 import AuthContext from '../store/auth-context';
+import { useDispatch } from 'react-redux';
+import { logout } from '../store/users-slice';
 
 export default function NavBar() {
   const { isOpen, onToggle } = useDisclosure();
   const history = useHistory();
   const authContext = useContext(AuthContext);
+  const dispatch = useDispatch();
 
   const loginHandler = () => {
     history.push('/login');
   }
 
   const logoutHandler = () => {
+    dispatch(logout());
     authContext.logout();
     history.push('/');
   }
