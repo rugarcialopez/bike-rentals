@@ -1,5 +1,5 @@
 import React from "react";
-import { Heading, Spinner, useToast, VStack } from '@chakra-ui/react';
+import { Heading, useToast, VStack } from '@chakra-ui/react';
 import BikesList from "../components/Bikes/BikesList";
 import AddBike from "../components/Bikes/AddBike";
 import { useSelector } from "react-redux";
@@ -82,7 +82,6 @@ const BikesPage = () => {
           Bikes
       </Heading>
       <BikesFilter/>
-      { status === 'pending' && <Spinner />}
       <BikesList />
       { authContext.role === 'manager' && status !== 'pending' && error === '' &&  <AddBike /> }
     </VStack>
