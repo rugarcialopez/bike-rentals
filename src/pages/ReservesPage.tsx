@@ -2,11 +2,12 @@ import React from "react";
 import { Heading, Spinner, VStack } from '@chakra-ui/react';
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store";
-import ReserveList from "../components/Reserves/ReservesList";
 import { useEffect } from "react";
 import { fetchReserves } from "../store/reserves-slice";
 import { useContext } from "react";
 import AuthContext from "../store/auth-context";
+import ReservesList from "../components/Reserves/ReservesList";
+import ReservesFilter from "../components/Reserves/ReservesFilter";
 
 const ReservesPage = () => {
   const authContext = useContext(AuthContext);
@@ -27,10 +28,11 @@ const ReservesPage = () => {
           bgGradient='linear(to-r, gray.700, gray.500, gray.300)'
           bgClip='text'
         >
-          My Reserves
+          Reserves
       </Heading>
       { status === 'pending' && <Spinner />}
-      { status !== 'pending' && error === '' && <ReserveList /> }
+      { status !== 'pending' && error === '' && authContext.role === 'manager' && <ReservesFilter/> }
+      { status !== 'pending' && error === '' && <ReservesList /> }
     </VStack>
   )
 }

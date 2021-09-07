@@ -7,8 +7,11 @@ import {
   Avatar,
 } from '@chakra-ui/react';
 import Reserve from '../../models/Reserve';
+import { useContext } from 'react';
+import AuthContext from '../../store/auth-context';
 
 const ReserveCard: React.FC<{reserve: Reserve, onCancelReservation: (id: string) => void}>= (props) => {
+  const authContext = useContext(AuthContext);
   return (
     <Box
         width='100%'
@@ -28,27 +31,36 @@ const ReserveCard: React.FC<{reserve: Reserve, onCancelReservation: (id: string)
         <Heading fontSize={'2xl'} fontFamily={'body'}>
           {props.reserve.brand}
         </Heading>
-        <Text fontWeight={600} color={'gray.500'} mb={4}>
+        <Text fontWeight={600} color={'gray.500'} mb={authContext.role === 'user' ? 4 : 0}>
           Reserved date: {props.reserve.date}
         </Text>
-        <Button
-          onClick={props.onCancelReservation.bind(null, props.reserve.id)}
-          flex={1}
-          fontSize={'sm'}
-          rounded={'full'}
-          bg={'blue.400'}
-          color={'white'}
-          boxShadow={
-            '0px 1px 25px -5px rgb(66 153 225 / 48%), 0 10px 10px -5px rgb(66 153 225 / 43%)'
-          }
-          _hover={{
-            bg: 'blue.500',
-          }}
-          _focus={{
-            bg: 'blue.500',
-          }}>
-          Cancel
-        </Button>
+        {
+          authContext.role === 'manager' &&
+          <Text fontWeight={600} color={'gray.500'} mb={4}>
+            Reserved by: {props.reserve.fullName}
+          </Text>
+        }
+        {
+          authContext.role !== 'manager' &&
+          <Button
+            onClick={props.onCancelReservation.bind(null, props.reserve.id)}
+            flex={1}
+            fontSize={'sm'}
+            rounded={'full'}
+            bg={'blue.400'}
+            color={'white'}
+            boxShadow={
+              '0px 1px 25px -5px rgb(66 153 225 / 48%), 0 10px 10px -5px rgb(66 153 225 / 43%)'
+            }
+            _hover={{
+              bg: 'blue.500',
+            }}
+            _focus={{
+              bg: 'blue.500',
+            }}>
+            Cancel
+          </Button>
+        }
       </Box>      
   );
 }

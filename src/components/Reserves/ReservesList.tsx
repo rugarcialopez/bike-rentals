@@ -4,20 +4,43 @@ import { useEffect } from 'react';
 import { useCallback } from 'react';
 import { useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
+import Reserve from '../../models/Reserve';
 import { RootState } from '../../store';
 import AuthContext from '../../store/auth-context';
 import { cancelReserve } from '../../store/reserves-slice';
 import InfoMessage from '../UI/InfoMessage';
 import ReserveCard from '../UI/ReserveCard';
 
-const ReserveList = () => {
+const ReservesList = () => {
   const authContext = useContext(AuthContext);
   const toast = useToast();
   const dispatch = useDispatch();
-  const reserves = useSelector((state: RootState) => state.reserves.list);
   const error = useSelector((state: RootState) => state.reserves.error);
   const status = useSelector((state: RootState) => state.reserves.status);
   const name = useSelector((state: RootState) => state.reserves.name);
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  let user = '';
+  let bike = '';
+  if (queryParams.get('user')) {
+    user = queryParams.get('user') as string;
+  }
+  if (queryParams.get('bike')) {
+    bike = queryParams.get('bike') as string;
+  }
+  const reserves = useSelector((state: RootState) => {
+    let filteredReserves = [...state.reserves.list];
+    if (user) {
+      filteredReserves = filteredReserves.filter((reserve: Reserve) => reserve.userId === user);
+    }
+    if (bike) {
+      filteredReserves = filteredReserves.filter((reserve: Reserve) => reserve.bikeId === bike);
+    }
+    return filteredReserves;
+  });
+  
+
 
   useEffect(() => {
     if (status === 'completed' && error === '' && name === 'CANCEL') {
@@ -39,7 +62,9 @@ const ReserveList = () => {
         duration: 1000
       });
     }
-  }, [name, status, error, toast])
+  }, [name, status, error, toast]);
+
+
 
   const cancelReservationHandler = useCallback((id: string) => {
     dispatch(cancelReserve(authContext.token, id));
@@ -55,4 +80,4 @@ const ReserveList = () => {
   )
 }
 
-export default React.memo(ReserveList);
+export default React.memo(ReservesList);
