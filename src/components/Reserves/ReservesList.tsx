@@ -21,14 +21,8 @@ const ReservesList = () => {
   const name = useSelector((state: RootState) => state.reserves.name);
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  let user = '';
-  let bike = '';
-  if (queryParams.get('user')) {
-    user = queryParams.get('user') as string;
-  }
-  if (queryParams.get('bike')) {
-    bike = queryParams.get('bike') as string;
-  }
+  let user = queryParams.get('user') ? queryParams.get('user'): '';
+  let bike = queryParams.get('bike') ? queryParams.get('bike') : '';
   const reserves = useSelector((state: RootState) => {
     let filteredReserves = [...state.reserves.list];
     if (user) {
