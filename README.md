@@ -22,9 +22,9 @@ Users can:
 Bikes:
 - Each bike will have the following information in the profile: Model, Photo, Color, Weight, Location and a checkbox indicating if the bike is available for rental or not
 
-## Deploy on heroku
+## Deploy on Vercel
 
-Hosting URL: https://bike-rentals-app.herokuapp.com/
+Hosting URL: https://bike-rentals-usd1.vercel.app/
 
 Default manager:
 - email:manager01@example.com
